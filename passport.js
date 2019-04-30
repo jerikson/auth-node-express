@@ -1,6 +1,6 @@
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt');
+const { ExtractJwt } = require('passport-jwt');
 const { JWT_SECRET } = require('./configuration');
 const User = require('./models/user');
 
@@ -8,7 +8,7 @@ const User = require('./models/user');
 passport.use(new JwtStrategy({
     // Where the token is contained and where the secret is
     // passport will decode the token
-    jwtFromRequest: ExtractJwt.fromAuthHeader('authorization'),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
     secretOrKey: JWT_SECRET
 
 }, async (payload, done) => {
