@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const { JWT_SECRET } = require('./configuration');
 const User = require('./models/user');
 
-
+// JSON WEB TOKEN STRATEGY
 passport.use(new JwtStrategy({
     // Where the token is contained and where the secret is
     // passport will decode the token
@@ -38,16 +38,24 @@ passport.use(new JwtStrategy({
 passport.use(new LocalStrategy({
     usernameField: 'email'
 }, async (email, password, done) => {
-    // Find the user by email
-    const user = await User.findOne({ email });
-    
-    //If not, handle it
-    if (!user) {
-        return done(null, false);
+    try {
+        // Find user by input email
+        const user = await User.findOne({ email });
+        // If user does not exist
+        if (!user) {
+            return done(null, false);
+        }
+        // If user exists, check if password if correct
+        const isMatch = await user.isValidPassword(password);
+        
+        // If password does not match
+        if (!isMatch) {
+            return done(null, false);
+        }
+
+        // Return user
+        done(null, user);
+    } catch(error) {
+        done(error, false);
     }
-    // If user exists, check if password if correct
-
-    // If not, handle it
-
-    // Return user
 }));

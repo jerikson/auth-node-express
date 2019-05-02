@@ -36,14 +36,15 @@ module.exports = {
         res.status(200).json({ token });
     }, 
 
-    
     signIn: async (req, res, next) => {
-        
+        // Generate token
+        const token = signToken(req.user);
+        res.status(200).json({ token });
+        console.log('Successful login:', req.user);
     },
 
-    // 
     secret: async (req, res, next) => {
-        console.log('Successfully access /secret');
         res.json({ secret: "resource" });
+        console.log('Successfully access /secret');
     }
 }

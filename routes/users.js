@@ -5,6 +5,8 @@ const passportConf = require('../passport');
 
 const { validateBody, schemas } = require('../helpers/routeHelpers');
 const UsersController = require('../controllers/users');
+const passportSignIn = passport.authenticate('local',  { session: false });
+const passportJWT = passport.authenticate('jwt', { session: false });
 
 // Exchange email and password for the token
 router.route('/signup')
@@ -12,9 +14,9 @@ router.route('/signup')
 
 // Exchange token using existing email and password
 router.route('/signin')
-    .post(UsersController.signIn);
+    .post(validateBody(schemas.authSchema), passportSignIn , UsersController.signIn);
 
 router.route('/secret')
-    .get(passport.authenticate('jwt', { session: false }), UsersController.secret);
+    .get(passportJWT, UsersController.secret);
 
 module.exports = router;
