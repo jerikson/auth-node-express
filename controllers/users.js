@@ -44,5 +44,6 @@ module.exports = {
     // 
     secret: async (req, res, next) => {
         console.log('Successfully access /secret');
+        res.json({ secret: "resource" });
     }
 }
