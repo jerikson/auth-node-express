@@ -9,7 +9,7 @@ signToken = user => {
         iss: 'jerikson', // who signed this token
         sub: user.id, // whom the token refers to
         iat: new Date().getTime(), // sec since Unix epoch
-        exp: new Date().setDate(new Date().getDate() + 1) // expiration time, now + 1 day ahead
+        expiresIn: '2 days' // expires in ..
     }, JWT_SECRET); // secret
 }
 
