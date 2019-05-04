@@ -2,6 +2,7 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
+const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const { JWT_SECRET } = require('./configuration');
 const User = require('./models/user');
 
@@ -59,3 +60,4 @@ passport.use(new LocalStrategy({
         done(error, false);
     }
 }));
+

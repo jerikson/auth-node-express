@@ -1,6 +1,3 @@
-// will work for linux for windows we are going to user cross-env in package json
-//process.env.NODE_ENV = 'test';
-
 const chai = require('chai');
 const faker = require('faker');
 const sinon = require('sinon');
