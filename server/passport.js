@@ -34,6 +34,15 @@ passport.use(new JwtStrategy({
     }
 }));
 
+// GOOGLE OAUTH STRATEGY
+passport.use('googleToken', new GooglePlusTokenStrategy({
+    clientID: '606801112206-hp4itcsltal5admld7j6njiua5na595g.apps.googleusercontent.com',
+    clientSecret: 'CYq8PDp3MwI7tz6rgOTfzec8'
+}, async (accessToken, refreshToken, profile, done) => {
+    console.log('accessToken:',accessToken);
+    console.log('refreshToken:', refreshToken);
+    console.log('profile:', profile);
+}));
 
 // LOCAL STRATEGY
 passport.use(new LocalStrategy({
