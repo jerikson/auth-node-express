@@ -2,47 +2,40 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
-// Create a schema
+ // What authentication strategy is going to be used?
 const userSchema = new Schema({
-  // What authentication strategy is going to be used?
   method: {
     type: String,
     enum: ['local', 'google', 'facebook'],
     required: true
   },
-
   local: {
     email: {
-    type: String,
-    lowercase: true
+      type: String,
+      lowercase: true
+    },
+    password: { 
+      type: String
+    }
   },
-  password: { 
-    type: String,
-  }
-},
-
   google: {
     id: {
-      type: String,
-      lowercase: true
+      type: String
     },
     email: {
       type: String,
       lowercase: true
     }
   },
-
   facebook: {
     id: {
-      type: String,
-      lowercase: true
+      type: String
     },
     email: {
       type: String,
       lowercase: true
     }
   }
-  
 });
 
 userSchema.pre('save', async function(next) {
