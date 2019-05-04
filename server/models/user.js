@@ -4,16 +4,45 @@ const Schema = mongoose.Schema;
 
 // Create a schema
 const userSchema = new Schema({
-  email: {
+  // What authentication strategy is going to be used?
+  method: {
     type: String,
-    required: true,
-    unique: true,
+    enum: ['local', 'google', 'facebook'],
+    required: true
+  },
+
+  local: {
+    email: {
+    type: String,
     lowercase: true
   },
   password: { 
     type: String,
-    required: true
   }
+},
+
+  google: {
+    id: {
+      type: String,
+      lowercase: true
+    },
+    email: {
+      type: String,
+      lowercase: true
+    }
+  },
+
+  facebook: {
+    id: {
+      type: String,
+      lowercase: true
+    },
+    email: {
+      type: String,
+      lowercase: true
+    }
+  }
+  
 });
 
 userSchema.pre('save', async function(next) {
