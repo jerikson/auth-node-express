@@ -12,7 +12,7 @@ passport.use(new JwtStrategy({
     // Where the token is contained and where the secret is
     // passport will decode the token
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: JWT_SECRET
+    secretOrKey: config.JWT_SECRET
 
 }, async (payload, done) => {
     try {
@@ -41,58 +41,60 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
     clientSecret: config.oauth.google.clientSecret
   }, async (accessToken, refreshToken, profile, done) => {
     try {
-        //console.log('profile', profile);
-        //console.log('accessToken', accessToken);
-        //console.log('refreshToken', refreshToken);
-        
-        // Check if user already exists
-        const existingUser = await User.findOne({ "google.id": profile.id });
-        if (existingUser) {
-            console.log('User already exists')
-            return done(null, existingUser);
+      // console.log('profile', profile);
+      // console.log('accessToken', accessToken);
+      // console.log('refreshToken', refreshToken);
+  
+     // Check if user already exists by google.id: profile.id
+      const existingUser = await User.findOne({ "google.id": profile.id });
+      if (existingUser) {
+          console.log('User already exists in database')
+        return done(null, existingUser);
+      }
+  
+      console.log('Creating a new user');
+
+      const newUser = new User({
+        method: 'google',
+        google: {
+          id: profile.id,
+          email: profile.emails[0].value
         }
-        
-        // Create new user
-        const newUser = new User({
-            method: 'google',
-            google: {
-            id: profile.id,
-            email: profile.emails[0].value
-            }
-        });
-        console.log('Creating new user')
-    
-        // Save user
-        await newUser.save();
-        done(null, newUser);
-        } catch(error) {
-        done(error, false, error.message);
-        }
-    }));
+      });
+  
+      await newUser.save();
+      done(null, newUser);
+    } catch(error) {
+      done(error, false, error.message);
+    }
+  }));
 
 // LOCAL STRATEGY
 passport.use(new LocalStrategy({
     usernameField: 'email'
-}, async (email, password, done) => {
+  }, async (email, password, done) => {
     try {
-        // Find user by input email
-        const user = await User.findOne({ email });
-        // If user does not exist
-        if (!user) {
-            return done(null, false);
-        }
-        // If user exists, check if password if correct
-        const isMatch = await user.isValidPassword(password);
-        
-        // If password does not match
-        if (!isMatch) {
-            return done(null, false);
-        }
-
-        // Return user
-        done(null, user);
+      // Find the user given the email
+      const user = await User.findOne({ "local.email": email });
+      
+      // If no user is not found
+      if (!user) {
+        return done(null, false);
+      }
+    
+      // Check if the password is correct
+      const isMatch = await user.isValidPassword(password);
+    
+      // If password is not correct
+      if (!isMatch) {
+          console.log('Password match:', isMatch);
+        return done(null, false);
+      }
+    
+      // Return the user
+      done(null, user);
     } catch(error) {
-        done(error, false);
+      done(error, false);
     }
-}));
+  }));
 

@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
- // What authentication strategy is going to be used?
+// Create a user schema
+// What STRATEGYU method should be used?
 const userSchema = new Schema({
   method: {
     type: String,
@@ -40,8 +41,7 @@ const userSchema = new Schema({
 
 userSchema.pre('save', async function(next) {
   try {
-    
-    if (!this.method !== 'local') {
+    if (this.method !== 'local') {
       next();
     }
 
@@ -50,13 +50,14 @@ userSchema.pre('save', async function(next) {
     // Generate a password hash (salt + hash)
     const passwordHash = await bcrypt.hash(this.local.password, salt);
     // Re-assign hashed version over original, plain text password
-    this.password = passwordHash;
+    this.local.password = passwordHash;
     next();
   } catch(error) {
     next(error);
   }
 });
 
+// Check if the hashed password matches the original password
 userSchema.methods.isValidPassword = async function(newPassword) {
   try {
     return await bcrypt.compare(newPassword, this.local.password);
@@ -65,8 +66,8 @@ userSchema.methods.isValidPassword = async function(newPassword) {
   }
 }
 
-// Create a model
+// Create a user model
 const User = mongoose.model('user', userSchema);
 
-// Export the model
+// Export the user model
 module.exports = User;
