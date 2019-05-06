@@ -21,7 +21,7 @@ module.exports = {
   signUp: async (req, res, next) => {
     const { email, password } = req.value.body;
 
-    // Check if a user already exists with the same email
+    // Check if user already exists by email
     // When using findOne() and check a nested prop, enclose in quotes
     const foundUser = await User.findOne({ "local.email": email });
     if (foundUser) { 

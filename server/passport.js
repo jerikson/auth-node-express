@@ -3,7 +3,6 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const GooglePlusTokenStrategy = require('passport-google-plus-token');
-const { JWT_SECRET } = require('./configuration');
 const config = require('./configuration');
 const User = require('./models/user');
 
@@ -11,7 +10,7 @@ const User = require('./models/user');
 passport.use(new JwtStrategy({
     // Where the token is contained and where the secret is
     // passport will decode the token
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
     secretOrKey: config.JWT_SECRET
 
 }, async (payload, done) => {
