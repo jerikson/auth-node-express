@@ -39,18 +39,32 @@ The user profile is like a JSON object that contains some properties like, first
 JWT Token ---> Client (Authenication)
 
 ## Goal / Use Cases:
+### Local Authentication:
+
 [1.1 Client creates an account using local-auth.
 During signin client receives JWT.]  
 [1.2. Client wants to sign in using existing local-auth account. Client exchanges email/password for JWT]  
 [1.3. Client wants to create new account using Google (OAuth).]
 
+### Google Authentication:
 [2.1. Client wants to create new account using Google (OAuth)]  
 [2.2. Client gets a hold of accessToken and send it to server]  
 [2.3. Server notices that this account does not exist yet, creates it, signs a new token and returns JWT to client.]
 
-[3.1. Client wants to log in using Google account(OAuth)]  
-[3.2. Client gets a hold of accessToken and sends it to server.]  
-[3.3. Server notices that this account already exists in DB, signs a new token and returns JWT to client.]
+[2.4. Client wants to log in using Google account(OAuth)]  
+[2.5. Client gets a hold of accessToken and sends it to server.]  
+[2.6. Server notices that this account already exists in DB, signs a new token and returns JWT to client.]
+
+
+### Facebook Authentication:
+[3.1. Client wants to create a new account using Facebook (Oauth)]  
+[3.2 Client gets a hold of accessToken and send it to server]  
+[3.3. Server notices that this account does not exist yet, creates it, signs a new token and returns JWT to client.]
+
+[4.1. Client wants to log in using Facebook account (OAuth)]  
+[5.2. Client gets a hold of accessToken and send it to server]  
+[6.3. Server notices that this account already exists in DB, signs a new token and returns JWT to client.]
 
 Client ---> "Protected Resource"  
 (Client uses JWT to access protected resource)
+
