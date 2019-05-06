@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
 // Create a user schema
-// What STRATEGYU method should be used?
+// What STRATEGY method should be used?
 const userSchema = new Schema({
   method: {
     type: String,
