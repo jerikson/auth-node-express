@@ -54,4 +54,3 @@ During signin client receives JWT.]
 
 Client ---> "Protected Resource"  
 (Client uses JWT to access protected resource)
-

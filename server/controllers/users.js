@@ -13,6 +13,11 @@ signToken = user => {
 }
 
 module.exports = {
+  
+    /*
+    router.route('/signup')
+    .post(validateBody(schemas.authSchema), UserController.signUp)
+  */
   signUp: async (req, res, next) => {
     const { email, password } = req.value.body;
 
@@ -41,6 +46,10 @@ module.exports = {
     res.status(200).json({ token });
   },
 
+  /*
+    router.route('/signin')
+    .post(validateBody(schemas.authSchema), passportSignIn, UserController.signIn)
+  */
   signIn: async (req, res, next) => {
     // Generate token
     const token = signToken(req.user);
@@ -48,7 +57,10 @@ module.exports = {
     res.status(200).json({ token });
   },
 
-
+  /*
+   router.route('/oauth/google')
+   .post(passportGoogle, UserController.googleOAuth);
+  */
   googleOAuth: async (req, res, next) => {
     // Generate token
     console.log('req.user', req.user);
@@ -57,6 +69,10 @@ module.exports = {
     res.status(200).json({ token });
   },
 
+  /*
+   router.route('/secret')
+   .get(passportJWT, UserController.secret);
+  */
   secret: async (req, res, next) => {
     console.log('Successfully acccessed /secret');
     res.json({ secret: "resource" });
