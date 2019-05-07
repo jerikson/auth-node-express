@@ -7,6 +7,7 @@ const FacebookTokenStrategy = require('passport-facebook-token');
 const config = require('./configuration');
 const User = require('./models/user');
 
+
 // JSON WEB TOKEN STRATEGY
 passport.use(new JwtStrategy({
     // Where the token is contained and where the secret is
@@ -68,6 +69,40 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
       done(error, false, error.message);
     }
   }));
+
+// FACEBOOK STRATEGY
+passport.use('facebookToken', new FacebookTokenStrategy({
+  clientID: config.oauth.facebook.clientID,
+  clientSecret: config.oauth.facebook.clientSecret
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('profile:', profile);
+    console.log('accessToken:', accessToken);
+    console.log('refreshToken:', refreshToken);
+    
+    // Check if user already exists by facebook.id
+    const existingUser = await User.findOne( { "facebook.id": profile.id });
+    if (existingUser) {
+      return done(null, existingUser);
+    }
+
+    // Create a new user
+    const newUser = new User({
+      method: 'facebook',
+      facebook: {
+        id: profile.id,
+        email: profile.emails[0].value
+      }
+    });
+
+    // Save new user
+    await newUser.save();
+    done(null, newUser);
+  } catch(error) {
+    done(error, false, error.message);
+  }
+}));
+
 
 // LOCAL STRATEGY
 passport.use(new LocalStrategy({
